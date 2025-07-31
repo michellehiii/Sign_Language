@@ -1,23 +1,9 @@
-# import streamlit as st
-# import cv2
-# import numpy as np
-# import mediapipe as mp
-# import tensorflow as tf
-# from tensorflow.keras import layers, models
-# from PIL import Image
-# import string
-# import os
-# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Force CPU-only
-
-# st.set_page_config(page_title="Sign Language Recognition")
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-os.environ["MEDIAPIPE_DISABLE_GPU"] = "true"
 
 import streamlit as st
 import cv2
 import numpy as np
-import mediapipe as mp
 import tensorflow as tf
 from tensorflow.keras import layers, models
 from PIL import Image
@@ -54,16 +40,16 @@ model.compile(optimizer='adam',
 model.load_weights("m1_91_3.h5")
 class_labels = list(string.ascii_uppercase)  # Modify if needed
 
-# 📸 Use camera input instead of file upload
+# Camera input
 img_file_buffer = st.camera_input("Take a picture of your hand")
 
 if img_file_buffer is not None:
-    # Convert to NumPy array
     img = Image.open(img_file_buffer)
     image = np.array(img.convert("RGB"))
+    image = cv2.flip(image, 1)
 
     # Preprocess for model
-    gray = cv2.cvtColor(final_image, cv2.COLOR_RGB2GRAY)
+    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     resized = cv2.resize(gray, (28, 28))
     reshaped = resized.reshape(1, 28, 28, 1).astype('float32') / 255.0
 
@@ -73,6 +59,4 @@ if img_file_buffer is not None:
     predicted_label = class_labels[predicted_class]
 
     # Display result
-    # st.image(final_image, caption=f'Prediction: {predicted_label}', channels="RGB")
-  
     st.success(f"Predicted: {predicted_label}")
