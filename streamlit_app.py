@@ -61,28 +61,6 @@ if img_file_buffer is not None:
     # Convert to NumPy array
     img = Image.open(img_file_buffer)
     image = np.array(img.convert("RGB"))
-    image = cv2.flip(image, 1)  
-
-    # MediaPipe Hand Detection
-    mp_hands = mp.solutions.hands
-    hands = mp_hands.Hands(static_image_mode=True, max_num_hands=1, min_detection_confidence=0.5)
-    results = hands.process(image)
-
-    white_background = np.ones_like(image) * 255
-    mask = np.zeros(image.shape[:2], dtype=np.uint8)
-
-    if results.multi_hand_landmarks:
-        for hand_landmarks in results.multi_hand_landmarks:
-            h, w, _ = image.shape
-            points = [(int(lm.x * w), int(lm.y * h)) for lm in hand_landmarks.landmark]
-            hull = cv2.convexHull(np.array(points, dtype=np.int32))
-            cv2.fillConvexPoly(mask, hull, 255)
-
-    # Create final image with white background
-    foreground = cv2.bitwise_and(image, image, mask=mask)
-    background_mask = cv2.bitwise_not(mask)
-    background = cv2.bitwise_and(white_background, white_background, mask=background_mask)
-    final_image = cv2.add(foreground, background)
 
     # Preprocess for model
     gray = cv2.cvtColor(final_image, cv2.COLOR_RGB2GRAY)
