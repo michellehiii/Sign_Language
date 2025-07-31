@@ -80,5 +80,6 @@ if img_file_buffer is not None:
     predicted_label = class_labels[predicted_class]
 
     # Display result
-    st.image(final_image, caption=f'Prediction: {predicted_label}', channels="RGB")
+    # st.image(final_image, caption=f'Prediction: {predicted_label}', channels="RGB")
+  
     st.success(f"Predicted: {predicted_label}")
