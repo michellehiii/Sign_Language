@@ -3,5 +3,3 @@ tensorflow==2.12.0
 opencv-python-headless==4.9.0.80
 numpy
 Pillow
-# mediapipe is problematic; comment out if it fails
-mediapipe==0.10.9
