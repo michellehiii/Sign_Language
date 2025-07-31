@@ -1,12 +1,20 @@
-# Install requirements:
-# pip install streamlit streamlit-webrtc opencv-python-headless tensorflow mediapipe pillow
+# import streamlit as st
+# import cv2
+# import numpy as np
+# import mediapipe as mp
+# import tensorflow as tf
+# from tensorflow.keras import layers, models
+# from PIL import Image
+# import string
+# import os
+# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Force CPU-only
 
+# st.set_page_config(page_title="Sign Language Recognition")
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 os.environ["MEDIAPIPE_DISABLE_GPU"] = "true"
 
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
 import cv2
 import numpy as np
 import mediapipe as mp
@@ -15,26 +23,9 @@ from tensorflow.keras import layers, models
 from PIL import Image
 import string
 
-st.set_page_config(page_title="Sign Language Recognition")
-st.title("🔁 Sign Language Recognition (Live Mirror + Capture)")
+st.title("Sign Language Recognition")
 
-# ----- Live Mirror Preview (streamlit-webrtc) -----
-st.subheader("📷 Live Mirrored Camera Preview")
-
-class MirrorTransformer(VideoTransformerBase):
-    def transform(self, frame):
-        img = frame.to_ndarray(format="bgr24")
-        mirrored = cv2.flip(img, 1)
-        return mirrored
-
-webrtc_streamer(
-    key="mirror-camera",
-    video_processor_factory=MirrorTransformer,
-    media_stream_constraints={"video": True, "audio": False},
-    async_processing=True,
-)
-
-# ----- Model Definition and Load -----
+# Load model
 model = models.Sequential()
 model.add(layers.Input(shape=(28, 28, 1)))
 model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same'))
@@ -59,23 +50,20 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
+# Load weights
 model.load_weights("m1_91_3.h5")
-class_labels = list(string.ascii_uppercase)  # Adjust if needed
+class_labels = list(string.ascii_uppercase)  # Modify if needed
 
-# ----- Take Photo and Predict -----
-st.subheader("📸 Capture and Predict")
-
+# 📸 Use camera input instead of file upload
 img_file_buffer = st.camera_input("Take a picture of your hand")
 
 if img_file_buffer is not None:
-    # Convert to mirrored NumPy image
-    img = Image.open(img_file_buffer).convert("RGB")
-    image = np.asarray(img)
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    image = cv2.flip(image, 1)  # 👈 Mirror the captured image
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    # Convert to NumPy array
+    img = Image.open(img_file_buffer)
+    image = np.array(img.convert("RGB"))
+    image = cv2.flip(image, 1)  
 
-    # MediaPipe hand detection
+    # MediaPipe Hand Detection
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands(static_image_mode=True, max_num_hands=1, min_detection_confidence=0.5)
     results = hands.process(image)
@@ -90,6 +78,7 @@ if img_file_buffer is not None:
             hull = cv2.convexHull(np.array(points, dtype=np.int32))
             cv2.fillConvexPoly(mask, hull, 255)
 
+    # Create final image with white background
     foreground = cv2.bitwise_and(image, image, mask=mask)
     background_mask = cv2.bitwise_not(mask)
     background = cv2.bitwise_and(white_background, white_background, mask=background_mask)
@@ -105,6 +94,7 @@ if img_file_buffer is not None:
     predicted_class = np.argmax(pred, axis=1)[0]
     predicted_label = class_labels[predicted_class]
 
-    # Show result
-    st.image(final_image, caption=f"Processed (mirrored) hand")
-    st.success(f"✅ Predicted Sign: **{predicted_label}**")
+    # Display result
+    # st.image(final_image, caption=f'Prediction: {predicted_label}', channels="RGB")
+  
+    st.success(f"Predicted: {predicted_label}")
