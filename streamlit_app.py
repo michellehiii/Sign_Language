@@ -24,7 +24,7 @@ if img_file_buffer is not None:
     img = Image.open(img_file_buffer).convert("RGB")
     image = np.array(img)
 
-     ✅ OPTIONAL: MediaPipe mask — RE-ENABLE LATER
+    # ✅ OPTIONAL: MediaPipe mask — RE-ENABLE LATER
     import mediapipe as mp
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands(static_image_mode=True, max_num_hands=1, min_detection_confidence=0.5)
