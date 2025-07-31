@@ -6,6 +6,8 @@ import tensorflow as tf
 from tensorflow.keras import layers, models
 from PIL import Image
 import string
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Force CPU-only
 
 st.set_page_config(page_title="Sign Language Recognition")
 
