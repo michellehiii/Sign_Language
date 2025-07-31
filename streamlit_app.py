@@ -1,7 +1,7 @@
 import streamlit as st
 import cv2
 import numpy as np
-# import mediapipe as mp
+import mediapipe as mp
 import tensorflow as tf
 from tensorflow.keras import layers, models
 from PIL import Image
@@ -37,17 +37,37 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 # Load weights
-model.load_weights("m1_91_3.h5")  # ✅ Make sure the model is in the same repo
-class_labels = list(string.ascii_uppercase)
+model.load_weights("C:/Users/miche/OneDrive/Desktop/Cosmos/m1_91_3.h5")
+class_labels = list(string.ascii_uppercase)  # Modify if needed
 
-# 📸 Use camera input
+# 📸 Use camera input instead of file upload
 img_file_buffer = st.camera_input("Take a picture of your hand")
 
 if img_file_buffer is not None:
     # Convert to NumPy array
     img = Image.open(img_file_buffer)
     image = np.array(img.convert("RGB"))
-    final_image = image  # ✅ Use unprocessed image directly
+
+    # MediaPipe Hand Detection
+    mp_hands = mp.solutions.hands
+    hands = mp_hands.Hands(static_image_mode=True, max_num_hands=1, min_detection_confidence=0.5)
+    results = hands.process(image)
+
+    white_background = np.ones_like(image) * 255
+    mask = np.zeros(image.shape[:2], dtype=np.uint8)
+
+    if results.multi_hand_landmarks:
+        for hand_landmarks in results.multi_hand_landmarks:
+            h, w, _ = image.shape
+            points = [(int(lm.x * w), int(lm.y * h)) for lm in hand_landmarks.landmark]
+            hull = cv2.convexHull(np.array(points, dtype=np.int32))
+            cv2.fillConvexPoly(mask, hull, 255)
+
+    # Create final image with white background
+    foreground = cv2.bitwise_and(image, image, mask=mask)
+    background_mask = cv2.bitwise_not(mask)
+    background = cv2.bitwise_and(white_background, white_background, mask=background_mask)
+    final_image = cv2.add(foreground, background)
 
     # Preprocess for model
     gray = cv2.cvtColor(final_image, cv2.COLOR_RGB2GRAY)
@@ -60,4 +80,5 @@ if img_file_buffer is not None:
     predicted_label = class_labels[predicted_class]
 
     # Display result
+    # st.image(final_image, caption=f'Prediction: {predicted_label}', channels="RGB")
     st.success(f"Predicted: {predicted_label}")
