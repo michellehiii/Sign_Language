@@ -1,3 +1,19 @@
+# import streamlit as st
+# import cv2
+# import numpy as np
+# import mediapipe as mp
+# import tensorflow as tf
+# from tensorflow.keras import layers, models
+# from PIL import Image
+# import string
+# import os
+# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Force CPU-only
+
+# st.set_page_config(page_title="Sign Language Recognition")
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ["MEDIAPIPE_DISABLE_GPU"] = "true"
+
 import streamlit as st
 import cv2
 import numpy as np
@@ -6,10 +22,6 @@ import tensorflow as tf
 from tensorflow.keras import layers, models
 from PIL import Image
 import string
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Force CPU-only
-
-st.set_page_config(page_title="Sign Language Recognition")
 
 st.title("Sign Language Recognition")
 
