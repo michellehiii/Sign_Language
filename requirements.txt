@@ -1,7 +1,9 @@
+megapip
 tensorflow==2.12.0
+keras==2.12.0
 mediapipe==0.10.9
 numpy
 Pillow
 h5py
-streamlit
 opencv-python
+streamlit
