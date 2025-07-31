@@ -6,3 +6,4 @@ Pillow
 h5py
 streamlit
 opencv-python
+streamlit-webrtc
