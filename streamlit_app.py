@@ -37,7 +37,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 # Load weights
-model = tf.keras.models.load_model("m1_.h5")
+model = tf.keras.models.load_model("m1_91_3.h5")
 class_labels = list(string.ascii_uppercase)  # Modify if needed
 
 # 📸 Use camera input instead of file upload
