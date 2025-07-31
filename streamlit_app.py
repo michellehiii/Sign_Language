@@ -61,6 +61,7 @@ if img_file_buffer is not None:
     # Convert to NumPy array
     img = Image.open(img_file_buffer)
     image = np.array(img.convert("RGB"))
+    image = cv2.flip(image, 1)  
 
     # MediaPipe Hand Detection
     mp_hands = mp.solutions.hands
