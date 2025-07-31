@@ -37,7 +37,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 # Load weights
-model.load_weights("m1_91_3.h5")
+model.load_weights("m1_90.h5")
 class_labels = list(string.ascii_uppercase)  # Modify if needed
 
 # 📸 Use camera input instead of file upload
