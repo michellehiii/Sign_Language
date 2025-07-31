@@ -5,4 +5,3 @@ Pillow
 h5py
 streamlit
 opencv-python
-
