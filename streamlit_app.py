@@ -6,11 +6,10 @@ import tensorflow as tf
 from tensorflow.keras import layers, models
 from PIL import Image
 import string
-import html  # To escape any special characters
 
-# Set page config and title using HTML
 st.set_page_config(page_title="Sign Language Recognition")
-st.markdown("<h1>Sign Language Recognition</h1>", unsafe_allow_html=True)
+
+st.title("Sign Language Recognition")
 
 # Load model
 model = models.Sequential()
@@ -37,11 +36,11 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-# Load model weights
+# Load weights
 model.load_weights("m1_91_3.h5")
 class_labels = list(string.ascii_uppercase)  # Modify if needed
 
-# Camera input
+# 📸 Use camera input instead of file upload
 img_file_buffer = st.camera_input("Take a picture of your hand")
 
 if img_file_buffer is not None:
@@ -80,7 +79,6 @@ if img_file_buffer is not None:
     predicted_class = np.argmax(pred, axis=1)[0]
     predicted_label = class_labels[predicted_class]
 
-    # Display result safely
-    safe_label = html.escape(str(predicted_label))
-    st.image(final_image, caption=f"Prediction: {safe_label}", channels="RGB")
-    st.markdown(f"<div style='color: green; font-weight: bold;'>Predicted: {safe_label}</div>", unsafe_allow_html=True)
+    # Display result
+    # st.image(final_image, caption=f'Prediction: {predicted_label}', channels="RGB")
+    st.success(f"Predicted: {predicted_label}")
