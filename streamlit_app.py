@@ -7,7 +7,7 @@ from tensorflow.keras import layers, models
 from PIL import Image
 import string
 
-st.set_page_config(page_title="Sign Language Recognition",layout="centered")
+st.set_page_config(page_title="Sign Language Recognition")
 
 st.title("Sign Language Recognition")
 
