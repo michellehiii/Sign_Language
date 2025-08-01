@@ -98,3 +98,6 @@ with tab2:
         # st.image(image, caption="Uploaded Image", use_column_width=True)
         st.success(f"Predicted: {predicted_label}")
         st.session_state.file_uploader = None
+        st.experimental_rerun()
+        if "predicted" in st.session_state:
+          del st.session_state.predicted
