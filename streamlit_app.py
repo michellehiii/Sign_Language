@@ -52,7 +52,7 @@ tab1, tab2 = st.tabs(["📷 Take Live Photo", "🖼️ Upload Photo"])
 # ----------------------------
 with tab1:
     img_file_buffer = st.camera_input("Take a picture of your hand")
-
+    st.info("📸 Tip: Use a white background when taking your photo for better prediction accuracy.")
     if img_file_buffer is not None:
         img = Image.open(img_file_buffer)
         image = np.array(img.convert("RGB"))
@@ -76,7 +76,7 @@ with tab1:
 # ----------------------------
 with tab2:
     uploaded_file = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
-
+    st.info("📸 Tip: Use a white background when taking your photo for better prediction accuracy.")
     if uploaded_file is not None:
         img = Image.open(uploaded_file)
         image = np.array(img.convert("RGB"))
