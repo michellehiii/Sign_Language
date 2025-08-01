@@ -2,7 +2,7 @@ tensorflow==2.12.0
 numpy
 Pillow
 h5py
-streamlit
+streamlit==1.31.1
 opencv-python
 streamlit-webrtc==0.45.0
 av
