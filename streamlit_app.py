@@ -8,8 +8,6 @@ import tensorflow as tf
 from tensorflow.keras import layers, models
 from PIL import Image
 import string
-from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
-import av
 
 st.set_page_config(page_title="Sign Language Recognition", layout="centered")
 st.title("Sign Language Recognition")
@@ -43,32 +41,11 @@ model.compile(optimizer='adam',
 
 model.load_weights("m1_91_3.h5")
 class_labels = list(string.ascii_uppercase)[:25]  # A-Y (assuming 25 classes)
-class VideoProcessor(VideoTransformerBase):
-    def __init__(self):
-        self.predicted_class = ""
 
-    def transform(self, frame):
-        img = frame.to_ndarray(format="bgr24")
-        img = cv2.flip(img, 1)  # mirror the image
-
-        # Convert to grayscale and resize for model
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        resized = cv2.resize(gray, (28, 28))
-        norm = resized.reshape(1, 28, 28, 1).astype("float32") / 255.0
-
-        # Predict
-        pred = model.predict(norm)
-        class_index = np.argmax(pred)
-        self.predicted_class = class_labels[class_index]
-
-        return img  # 🔍 No overlay on video
-
-    def get_prediction(self):
-        return self.predicted_class
 # ----------------------------
 # Tabs for Camera and Upload
 # ----------------------------
-tab1, tab2,tab3 = st.tabs(["📷 Take Live Photo", "🖼️ Upload Photo","🔤 Live Sign Prediction"])
+tab1, tab2 = st.tabs(["📷 Take Live Photo", "🖼️ Upload Photo"])
 
 # ----------------------------
 # Tab 1 – Camera Input
@@ -120,15 +97,3 @@ with tab2:
 
         # st.image(image, caption="Uploaded Image", use_column_width=True)
         st.success(f"Predicted: {predicted_label}")
-with tab3:
-    # Create a VideoProcessor instance and streamer
-  ctx = webrtc_streamer(
-        key="sign-detection",
-        video_processor_factory=VideoProcessor,
-        media_stream_constraints={"video": True, "audio": False},
-        async_processing=True,)
-
-  # Show prediction separately
-  if ctx.video_processor:
-    st.markdown("### 🔍 Predicted Letter:")
-    st.markdown(f"<h1 style='text-align: center; color: green;'>{ctx.video_processor.get_prediction()}</h1>", unsafe_allow_html=True)
