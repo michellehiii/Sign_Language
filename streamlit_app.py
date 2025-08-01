@@ -79,6 +79,12 @@ with tab2:
     st.info("📸 Tip: Use a white background when taking your photo for better prediction accuracy.")
     if uploaded_file is not None:
         img = Image.open(uploaded_file)
+        preview_image = image.resize((100, 100))
+        preview_image = image.resize((100, 100))
+
+        # Display resized preview
+        st.image(preview_image, caption="Thumbnail Preview", use_container_width=False)
+      
         image = np.array(img.convert("RGB"))
 
         # Preprocess
@@ -93,3 +99,4 @@ with tab2:
 
         # st.image(image, caption="Uploaded Image", use_column_width=True)
         st.success(f"Predicted: {predicted_label}")
+        st.session_state.file_uploader = None
