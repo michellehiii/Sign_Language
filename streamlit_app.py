@@ -55,7 +55,7 @@ with tab1:
     st.info("📸 Tip: Use a white background when taking your photo for better prediction accuracy.")
 
     # Custom CSS to style the camera button
-      st.markdown("""
+    st.markdown("""
       <style>
       div[data-testid="stCameraInputLabel"] {
           font-size: 0px;  /* Hide default label */
