@@ -56,26 +56,27 @@ with tab1:
 
     # Custom CSS to style the camera button
     st.markdown("""
-      <style>
-      div[data-testid="stCameraInputLabel"] {
-          font-size: 0px;  /* Hide default label */
-      }
-      button[kind="secondary"] {
-          background-color: #4CAF50;
-          color: white;
-          font-size: 18px;
-          padding: 10px 20px;
-          border-radius: 10px;
-      }
-      </style>
-      """, unsafe_allow_html=True)
-  
-      # Camera input (with hidden label)
+    <style>
+    div[data-testid="stCameraInputLabel"] {
+        font-size: 0px;  /* Hide default label */
+    }
+    button[kind="secondary"] {
+        background-color: #4CAF50;
+        color: white;
+        font-size: 18px;
+        padding: 10px 20px;
+        border-radius: 10px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # Camera input (with hidden label)
     img_file_buffer = st.camera_input(" ")
-      if img_file_buffer is not None:
-          img = Image.open(img_file_buffer)
-          image = np.array(img.convert("RGB"))
-          image = cv2.flip(image, 1)
+
+    if img_file_buffer is not None:
+        img = Image.open(img_file_buffer)
+        image = np.array(img.convert("RGB"))
+        image = cv2.flip(image, 1)
 
         # Preprocess
         gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
