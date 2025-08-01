@@ -101,14 +101,14 @@ with tab3:
   st.title("🔤 Live Sign Prediction")
 
     # Create a VideoProcessor instance and streamer
-    ctx = webrtc_streamer(
+  ctx = webrtc_streamer(
         key="sign-detection",
         video_processor_factory=VideoProcessor,
         media_stream_constraints={"video": True, "audio": False},
         async_processing=True,
     )
 
-    # Show prediction separately
-    if ctx.video_processor:
-        st.markdown("### 🔍 Predicted Letter:")
-        st.markdown(f"<h1 style='text-align: center; color: green;'>{ctx.video_processor.get_prediction()}</h1>", unsafe_allow_html=True)
+  # Show prediction separately
+  if ctx.video_processor:
+    st.markdown("### 🔍 Predicted Letter:")
+    st.markdown(f"<h1 style='text-align: center; color: green;'>{ctx.video_processor.get_prediction()}</h1>", unsafe_allow_html=True)
