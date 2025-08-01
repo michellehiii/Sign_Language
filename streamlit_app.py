@@ -9,9 +9,12 @@ from tensorflow.keras import layers, models
 from PIL import Image
 import string
 
+st.set_page_config(page_title="Sign Language Recognition", layout="centered")
 st.title("Sign Language Recognition")
 
+# ----------------------------
 # Load model
+# ----------------------------
 model = models.Sequential()
 model.add(layers.Input(shape=(28, 28, 1)))
 model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same'))
@@ -36,27 +39,57 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-# Load weights
 model.load_weights("m1_91_3.h5")
-class_labels = list(string.ascii_uppercase)  # Modify if needed
+class_labels = list(string.ascii_uppercase)[:25]  # A-Y (assuming 25 classes)
 
-# Camera input
-img_file_buffer = st.camera_input("Take a picture of your hand")
+# ----------------------------
+# Tabs for Camera and Upload
+# ----------------------------
+tab1, tab2 = st.tabs(["📷 Take Live Photo", "🖼️ Upload Photo"])
 
-if img_file_buffer is not None:
-    img = Image.open(img_file_buffer)
-    image = np.array(img.convert("RGB"))
-    image = cv2.flip(image, 1)
+# ----------------------------
+# Tab 1 – Camera Input
+# ----------------------------
+with tab1:
+    img_file_buffer = st.camera_input("Take a picture of your hand")
 
-    # Preprocess for model
-    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    resized = cv2.resize(gray, (28, 28))
-    reshaped = resized.reshape(1, 28, 28, 1).astype('float32') / 255.0
+    if img_file_buffer is not None:
+        img = Image.open(img_file_buffer)
+        image = np.array(img.convert("RGB"))
+        image = cv2.flip(image, 1)
 
-    # Predict
-    pred = model.predict(reshaped)
-    predicted_class = np.argmax(pred, axis=1)[0]
-    predicted_label = class_labels[predicted_class]
+        # Preprocess
+        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        resized = cv2.resize(gray, (28, 28))
+        reshaped = resized.reshape(1, 28, 28, 1).astype('float32') / 255.0
 
-    # Display result
-    st.success(f"Predicted: {predicted_label}")
+        # Predict
+        pred = model.predict(reshaped)
+        predicted_class = np.argmax(pred, axis=1)[0]
+        predicted_label = class_labels[predicted_class]
+
+        st.image(image, caption="Captured Image", use_column_width=True)
+        st.success(f"Predicted: {predicted_label}")
+
+# ----------------------------
+# Tab 2 – Upload Image
+# ----------------------------
+with tab2:
+    uploaded_file = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
+
+    if uploaded_file is not None:
+        img = Image.open(uploaded_file)
+        image = np.array(img.convert("RGB"))
+
+        # Preprocess
+        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        resized = cv2.resize(gray, (28, 28))
+        reshaped = resized.reshape(1, 28, 28, 1).astype('float32') / 255.0
+
+        # Predict
+        pred = model.predict(reshaped)
+        predicted_class = np.argmax(pred, axis=1)[0]
+        predicted_label = class_labels[predicted_class]
+
+        st.image(image, caption="Uploaded Image", use_column_width=True)
+        st.success(f"Predicted: {predicted_label}")
