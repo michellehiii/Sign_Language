@@ -71,7 +71,7 @@ with tab1:
       """, unsafe_allow_html=True)
   
       # Camera input (with hidden label)
-      img_file_buffer = st.camera_input(" ")
+    img_file_buffer = st.camera_input(" ")
       if img_file_buffer is not None:
           img = Image.open(img_file_buffer)
           image = np.array(img.convert("RGB"))
