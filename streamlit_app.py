@@ -61,15 +61,10 @@ class VideoProcessor(VideoTransformerBase):
         class_index = np.argmax(pred)
         self.predicted_class = class_labels[class_index]
 
-        # Optional: overlay on image
-        cv2.putText(img, f"Pred: {self.predicted_class}", (10, 30),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-
-        return img
+        return img  # 🔍 No overlay on video
 
     def get_prediction(self):
         return self.predicted_class
-
 # ----------------------------
 # Tabs for Camera and Upload
 # ----------------------------
@@ -131,8 +126,7 @@ with tab3:
         key="sign-detection",
         video_processor_factory=VideoProcessor,
         media_stream_constraints={"video": True, "audio": False},
-        async_processing=True,
-    )
+        async_processing=True,)
 
   # Show prediction separately
   if ctx.video_processor:
