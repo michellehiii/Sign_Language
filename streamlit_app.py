@@ -91,5 +91,5 @@ with tab2:
         predicted_class = np.argmax(pred, axis=1)[0]
         predicted_label = class_labels[predicted_class]
 
-        st.image(image, caption="Uploaded Image", use_column_width=True)
+        # st.image(image, caption="Uploaded Image", use_column_width=True)
         st.success(f"Predicted: {predicted_label}")
