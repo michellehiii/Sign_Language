@@ -81,7 +81,7 @@ with tab2:
         img = Image.open(uploaded_file)
         preview_image = img.resize((200, 200))
         # Display resized preview
-        st.image(preview_image, caption="Thumbnail Preview", use_container_width=False)
+        st.image(preview_image, caption="Thumbnail Preview")
       
         image = np.array(img.convert("RGB"))
 
