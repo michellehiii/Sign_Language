@@ -3,6 +3,6 @@ numpy
 Pillow
 h5py
 streamlit==1.31.1
-opencv-python
+opencv-python-headless
 streamlit-webrtc==0.45.0
 av
