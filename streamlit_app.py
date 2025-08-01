@@ -77,7 +77,7 @@ with tab1:
 # ----------------------------
 with tab2:
     uploaded_file = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
-
+    st.info("📸 Tip: Use a white background when taking your photo for better prediction accuracy.")
     if uploaded_file is not None:
         img = Image.open(uploaded_file)
         image = np.array(img.convert("RGB"))
