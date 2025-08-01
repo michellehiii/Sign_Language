@@ -45,7 +45,7 @@ class_labels = list(string.ascii_uppercase)[:25]  # A-Y (assuming 25 classes)
 # ----------------------------
 # Tabs for Camera and Upload
 # ----------------------------
-tab1, tab2 = st.tabs(["📷 Take Live Photo", "🖼️ Upload Photo"])
+tab1, tab2,tab3 = st.tabs(["📷 Take Live Photo", "🖼️ Upload Photo","🔤 Live Sign Prediction"])
 
 # ----------------------------
 # Tab 1 – Camera Input
@@ -98,8 +98,6 @@ with tab2:
         # st.image(image, caption="Uploaded Image", use_column_width=True)
         st.success(f"Predicted: {predicted_label}")
 with tab3:
-  st.title("🔤 Live Sign Prediction")
-
     # Create a VideoProcessor instance and streamer
   ctx = webrtc_streamer(
         key="sign-detection",
