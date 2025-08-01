@@ -1,3 +1,23 @@
+st.markdown("### 📸 Custom Styled Button")
+st.markdown("""
+<style>
+div[data-testid="stCameraInputLabel"] {
+    font-size: 0px;  /* Hide default label */
+}
+button[kind="secondary"] {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+</style>
+""", unsafe_allow_html=True)
+
+img_file_buffer = st.camera_input(" ")  
+
+into my code:
+
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
@@ -53,25 +73,6 @@ tab1, tab2 = st.tabs(["📷 Take Live Photo", "🖼️ Upload Photo"])
 with tab1:
     img_file_buffer = st.camera_input("Take a picture of your hand")
     st.info("📸 Tip: Use a white background when taking your photo for better prediction accuracy.")
-
-    # Custom CSS to style the camera button
-    st.markdown("""
-    <style>
-    div[data-testid="stCameraInputLabel"] {
-        font-size: 0px;  /* Hide default label */
-    }
-    button[kind="secondary"] {
-        background-color: #4CAF50;
-        color: white;
-        font-size: 18px;
-        padding: 10px 20px;
-        border-radius: 10px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    # Camera input (with hidden label)
-    img_file_buffer = st.camera_input(" ")
 
     if img_file_buffer is not None:
         img = Image.open(img_file_buffer)
