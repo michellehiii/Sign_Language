@@ -51,7 +51,7 @@ tab1, tab2 = st.tabs(["📷 Take Live Photo", "🖼️ Upload Photo"])
 # Tab 1 – Camera Input
 # ----------------------------
 with tab1:
-    img_file_buffer = st.camera_input("Take a picture of your hand, ensure pictures with white background for better accuracy")
+    img_file_buffer = st.camera_input("Take a picture of your hand")
     st.info("📸 Tip: Use a white background when taking your photo for better prediction accuracy.")
 
     if img_file_buffer is not None:
