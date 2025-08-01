@@ -43,6 +43,32 @@ model.compile(optimizer='adam',
 
 model.load_weights("m1_91_3.h5")
 class_labels = list(string.ascii_uppercase)[:25]  # A-Y (assuming 25 classes)
+class VideoProcessor(VideoTransformerBase):
+    def __init__(self):
+        self.predicted_class = ""
+
+    def transform(self, frame):
+        img = frame.to_ndarray(format="bgr24")
+        img = cv2.flip(img, 1)  # mirror the image
+
+        # Convert to grayscale and resize for model
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        resized = cv2.resize(gray, (28, 28))
+        norm = resized.reshape(1, 28, 28, 1).astype("float32") / 255.0
+
+        # Predict
+        pred = model.predict(norm)
+        class_index = np.argmax(pred)
+        self.predicted_class = class_labels[class_index]
+
+        # Optional: overlay on image
+        cv2.putText(img, f"Pred: {self.predicted_class}", (10, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+        return img
+
+    def get_prediction(self):
+        return self.predicted_class
 
 # ----------------------------
 # Tabs for Camera and Upload
